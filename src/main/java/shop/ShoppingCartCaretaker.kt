@@ -1,47 +1,45 @@
 package shop
 
 class ShoppingCartCaretaker {
-    private val mementoList = ArrayList<ShoppingCartMemento>()
-    private lateinit var lastAdded: ShoppingCartMemento
+    private lateinit var first: ShoppingCartMemento
+    private lateinit var last: ShoppingCartMemento
     private lateinit var currentState: ShoppingCartMemento
 
-    fun addMemento(state: ShoppingCartMemento) {
-        //if we are in middle of list remove all previous states and add new, only if current state is Initialized
-        lastAdded = state
-        if (this::currentState.isInitialized) {
-            val index = mementoList.indexOf(currentState)
-            println(mementoList.size)
-            for (i in mementoList.size - 1 downTo index + 1) {
-                println(i)
-                mementoList.removeAt(i)
-            }
-            currentState = lastAdded
-        }
-        mementoList.add(state)
-
+    init{
+        //creates an empty cart for if the client undoes the first item.
+        this.addMemento(ShoppingCartMemento(ArrayList()))
     }
 
-
-    fun getSpecificMemento(index: Int): ShoppingCartMemento {
-        return mementoList[index]
+    fun addMemento(state: ShoppingCartMemento) {
+        if(!this::first.isInitialized){
+            this.first = state
+            this.last = state
+            this.currentState = state
+        } else {
+            if(currentState != last){
+                //removes all the items after currentState
+                currentState.next = null
+                this.last = currentState
+            }
+            val temp = this.last
+            temp.next = state
+            state.prev = temp
+            this.last = state
+            currentState = state
+        }
     }
 
     fun previousMemento(): ShoppingCartMemento{
-        if (!this::currentState.isInitialized)
-            currentState = lastAdded
-
-        val index = mementoList.indexOf(currentState)
-        if (index > 0) {
-            currentState = mementoList[index - 1]
+        if(currentState != first){
+            currentState = currentState.prev
         }
 
         return currentState
     }
 
     fun nextMemento(): ShoppingCartMemento {
-        val index = mementoList.indexOf(currentState)
-        if (index + 1 < mementoList.size) {
-            currentState = mementoList[index + 1]
+        if(currentState != last){
+            currentState = currentState.next!!
         }
         return currentState
     }

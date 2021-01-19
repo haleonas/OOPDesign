@@ -14,15 +14,19 @@ fun main() {
     val caretaker = ShoppingCartCaretaker()
 
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem1))
+    shoppingCart.undo(caretaker.previousMemento())//- 4:e
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem2))
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem3))
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem2))//+ 4:E
-    shoppingCart.undo(caretaker.previousMemento())//- 4:e
+    shoppingCart.undo(caretaker.previousMemento())//- 4:e nu 3
+    shoppingCart.undo(caretaker.previousMemento())//- 4:e nu 3
+    shoppingCart.undo(caretaker.previousMemento())//- 4:e nu 3
+    shoppingCart.redo(caretaker.nextMemento())//
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem1))//+ 4:e tar bort den gamla 4:e
     shoppingCart.undo(caretaker.previousMemento())//- 4:e nu 3
     shoppingCart.undo(caretaker.previousMemento())//- 3:e nu 2
     shoppingCart.redo(caretaker.nextMemento())// tillbaka till 3 items
-    shoppingCart.redo(caretaker.nextMemento())// tillbaka till 4 items
+    shoppingCart.redo(caretaker.nextMemento())// tillbaka till 4 items*/
 
     println(shoppingCart.receipt())
 

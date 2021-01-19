@@ -3,19 +3,15 @@ package shop
 import java.math.BigDecimal
 import java.util.Comparator
 import java.util.stream.Collectors
-import java.util.stream.Stream
 
 class ShoppingCart {
     private var items = ArrayList<ShoppingCartItem>()
     private var discount: DiscountStrategy? = null
+    private lateinit var totalDiscount: BigDecimal
 
-    fun addCartItem(item: ShoppingCartItem):ShoppingCartMemento {
+    fun addCartItem(item: ShoppingCartItem): ShoppingCartMemento {
         items.add(item)
         return ShoppingCartMemento(items)
-    }
-
-    fun stream(): Stream<ShoppingCartItem> {
-        return items.stream()
     }
 
     private fun calculatePrice(): BigDecimal {
@@ -23,22 +19,15 @@ class ShoppingCart {
         val discountDirector = DiscountDirector()
         discount = discountDirector.countDiscount(items)
 
-        for (item in items) {
+        for (item in items)
             sum = item.itemCost().multiply(BigDecimal.valueOf(item.quantity().toLong())).add(sum)
+
+        return if (discount != null){
+            totalDiscount = discount!!.calcDiscount(items)
+            sum - totalDiscount
         }
-
-        return if (discount != null) {
-            sum - discount!!.calcDiscount(items)
-        } else
+        else
             sum
-    }
-
-    fun undo(memento: ShoppingCartMemento) {
-        items = ArrayList(memento.items)
-    }
-
-    fun redo(memento: ShoppingCartMemento) {
-        items = ArrayList(memento.items)
     }
 
     fun receipt(): String {
@@ -50,15 +39,23 @@ class ShoppingCart {
                 item.product().name()
             })
             .collect(Collectors.toList())
-        for (each in list) {
-            sb.append(String.format("%-4s %-10s % 7.2f\n", each.quantity(),each.product().name(), each.itemCost()))
+        list.forEach { cartItem ->
+            sb.append(String.format("%-4s %-10s % 7.2f\n", cartItem.quantity(), cartItem.product().name(), cartItem.itemCost()))
         }
         sb.append(line)
         sb.append(String.format("%24s% 8.2f", "TOTAL:", calculatePrice()))
-        if(discount != null){
-            sb.append(String.format("\n%24s% 8.2f", "Discount:", discount?.calcDiscount(items)))
-        }
+
+        if (discount == null) return sb.toString()
+        sb.append(String.format("\n%24s% 8.2f", "Discount:", totalDiscount))
 
         return sb.toString()
+    }
+
+    fun undo(memento: ShoppingCartMemento) {
+        items = ArrayList(memento.items)
+    }
+
+    fun redo(memento: ShoppingCartMemento) {
+        items = ArrayList(memento.items)
     }
 }
