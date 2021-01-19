@@ -5,6 +5,10 @@ class ShoppingCartCaretaker {
     private lateinit var lastAdded: ShoppingCartMemento
     private lateinit var currentState: ShoppingCartMemento
 
+    init{
+        this.addMemento(ShoppingCartMemento(ArrayList()))
+    }
+
     fun addMemento(state: ShoppingCartMemento) {
         //if we are in middle of list remove all previous states and add new, only if current state is Initialized
         lastAdded = state

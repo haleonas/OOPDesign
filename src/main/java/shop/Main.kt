@@ -14,6 +14,7 @@ fun main() {
     val caretaker = ShoppingCartCaretaker()
 
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem1))
+    shoppingCart.undo(caretaker.previousMemento())//- 4:e
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem2))
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem3))
     caretaker.addMemento(shoppingCart.addCartItem(shoppingCartItem2))//+ 4:E
@@ -25,8 +26,6 @@ fun main() {
     shoppingCart.redo(caretaker.nextMemento())// tillbaka till 4 items
 
     println(shoppingCart.receipt())
-
-
 
 }
 
