@@ -20,7 +20,7 @@ class ShoppingCart {
         discount = discountDirector.countDiscount(items)
 
         for (item in items)
-            sum = item.itemCost().multiply(BigDecimal.valueOf(item.quantity().toLong())).add(sum)
+            sum = item.itemCost().multiply(BigDecimal.valueOf(item.quantity.toLong())).add(sum)
 
         return if (discount != null){
             totalDiscount = discount!!.calcDiscount(items)
@@ -40,7 +40,7 @@ class ShoppingCart {
             })
             .collect(Collectors.toList())
         list.forEach { cartItem ->
-            sb.append(String.format("%-4s %-10s % 7.2f\n", cartItem.quantity(), cartItem.product().name(), cartItem.itemCost()))
+            sb.append(String.format("%-4s %-10s % 7.2f\n", cartItem.quantity, cartItem.product().name(), cartItem.itemCost()))
         }
         sb.append(line)
         sb.append(String.format("%24s% 8.2f", "TOTAL:", calculatePrice()))
@@ -58,4 +58,10 @@ class ShoppingCart {
     fun redo(memento: ShoppingCartMemento) {
         items = ArrayList(memento.items)
     }
+
+    fun changeAmount(amount:Int, index:Int):ShoppingCartMemento{
+        items[index].quantity = amount
+        return ShoppingCartMemento(items)
+    }
+
 }

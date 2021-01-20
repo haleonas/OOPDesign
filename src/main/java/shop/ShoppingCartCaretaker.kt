@@ -29,6 +29,8 @@ class ShoppingCartCaretaker {
         }
     }
 
+
+
     fun previousMemento(): ShoppingCartMemento{
         if(currentState != first){
             currentState = currentState.prev

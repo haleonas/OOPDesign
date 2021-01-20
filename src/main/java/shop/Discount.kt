@@ -19,8 +19,8 @@ class DiscountDirector {
         var totalWares = 0
 
         items.map {
-            sum += it.itemCost() * BigDecimal(it.quantity())
-            totalWares += it.quantity()
+            sum += it.itemCost() * BigDecimal(it.quantity)
+            totalWares += it.quantity
         }
         return Pair(sum, totalWares)
     }

@@ -10,6 +10,6 @@ class DiscountItemFree : DiscountStrategy {
                 cheapestItem = it
             }
         }
-        return cheapestItem.itemCost() * BigDecimal(cheapestItem.quantity())
+        return cheapestItem.itemCost() * BigDecimal(cheapestItem.quantity)
     }
 }
