@@ -2,12 +2,8 @@ package shop
 
 import java.math.BigDecimal
 
-class ShoppingCartItem(private val product: Product, itemCost: Double, private val quantity: Int) {
+class ShoppingCartItem(private val product: Product, itemCost: Double,var quantity: Int) {
     private val itemCost: BigDecimal = BigDecimal.valueOf(itemCost)
-
-    fun quantity(): Int {
-        return quantity
-    }
 
     fun product(): Product {
         return product

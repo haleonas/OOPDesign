@@ -5,7 +5,7 @@ class ShoppingCartCaretaker {
     private lateinit var lastAdded: ShoppingCartMemento
     private lateinit var currentState: ShoppingCartMemento
 
-    init{
+    init {
         this.addMemento(ShoppingCartMemento(ArrayList()))
     }
 
@@ -14,7 +14,6 @@ class ShoppingCartCaretaker {
         lastAdded = state
         if (this::currentState.isInitialized) {
             val index = mementoList.indexOf(currentState)
-            println(mementoList.size)
             for (i in mementoList.size - 1 downTo index + 1) {
                 println(i)
                 mementoList.removeAt(i)
@@ -25,12 +24,7 @@ class ShoppingCartCaretaker {
 
     }
 
-
-    fun getSpecificMemento(index: Int): ShoppingCartMemento {
-        return mementoList[index]
-    }
-
-    fun previousMemento(): ShoppingCartMemento{
+    fun previousMemento(): ShoppingCartMemento {
         if (!this::currentState.isInitialized)
             currentState = lastAdded
 
